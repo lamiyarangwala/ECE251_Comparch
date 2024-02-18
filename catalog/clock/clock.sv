@@ -7,23 +7,26 @@
 // module: clock
 // hdl: Verilog
 //
-// author: Your Name <your.name@cooper.edu>
+// author: Lamiya Rangwala <lamiya.rangwala@cooper.edu>
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 `ifndef CLOCK
 `define CLOCK
 
-module clock(add your module parameters here);
-   //
-   // ---------------- PORT DEFINITIONS ----------------
-   //
-   // ADD YOUR MODULE INPUTS AND OUTPUTS HERE
+module clock
+ #(parameter period = 10) // configuring parametrized module;
+ //                          after module name but before instance name, with # 
+  (output logic clk); 
 
-   //
-   // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
-   //
+   
+   
+   localparam half_period = period/2;
+   initial clk = 1'b0;
+    
 
+   always 
+   #half_period clk = ~clk;
 endmodule
 
 `endif // CLOCK
