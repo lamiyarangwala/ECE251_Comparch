@@ -13,20 +13,20 @@
 
 `timescale 1ns/100ps
 
-`include "./dff.sv"
+`include "dff.sv"
 
 module tb_dff;
 
-   reg [3:0] a, b;   //inputs are reg for test bench
-   wire [3:0] c;     //outputs are wire for test bench
-   
+   reg CLK, EN, RST;
+   logic D, Q, QN;
+
    //
    // ---------------- INITIALIZE TEST BENCH ----------------
    //
    initial
-     begin
-        $dumpfile("tb_example_module.vcd"); // for Makefile, make dump file same as module name
-        $dumpvars(0, uut);
+     begin 
+        $dumpfile("tb_dff.vcd"); // for Makefile, make dump file same as module name
+        $dumpvars(0, dut);
       //   $monitor("A is %b, B is %b, C is %b", a, b, c);
       //   #50 A = 4'b1100;
       //   #50 $finish;
@@ -40,9 +40,11 @@ module tb_dff;
       begin
          // {a, b, cin} = invect [3:0];
          // #10 $display ("abcin = %b, cout = %b, sum = %b", {a, b, cin}, cout, sum);
-         {a} = invect [3:0];
-         {b} = ~invect [3:0];
-         #10 $display("a=%b, b=%b, c=%b", a, b, c);
+         {D} = invect [1];
+         {CLK} = invect[0];
+         {EN} = invect[2];
+         {RST} = [3];
+         #10 $display("D=%b, CLK=%b, RESET=%b, Q=%b, Qn=%b", D, CLK, RESET, Q, QN);
       end
       $finish;
    end
@@ -50,7 +52,7 @@ module tb_dff;
    //
    // ---------------- INSTANTIATE UNIT UNDER TEST (UUT) ----------------
    //
-   dff uut(.A(a), .B(b), .C(c));
+   dff #dut(.d(D), .rst(RST), .en(EN), .clk(CLK), .q(Q), .qn(QN));
 
 endmodule
 

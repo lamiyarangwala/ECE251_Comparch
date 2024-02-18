@@ -8,8 +8,8 @@
 $COMPONENT = "dff"
 #
 $SRC = "$COMPONENT.sv"
-$TESTBENCH = "tb_clock_dividers.sv"
-$TBOUTPUT = "tb_clock_dividers.vcd"
+$TESTBENCH = "dff.sv"
+$TBOUTPUT = "dff.vcd"
 
 # TOOLS
 # You need to update the paths below to the tools in your system
