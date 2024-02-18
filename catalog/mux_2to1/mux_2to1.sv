@@ -7,24 +7,43 @@
 // module: mux_2to1
 // hdl: Verilog
 //
-// author: Your Name <your.name@cooper.edu>
+// author: Lamiya Rangwala <your.name@cooper.edu>
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 `ifndef MUX_2TO1
 `define MUX_2TO1
 
-module mux_2to1(add your module parameters here);
+module mux_2to1(a, b, c);
    //
    // ---------------- PORT DEFINITIONS ----------------
    //
    // ADD YOUR MODULE INPUTS AND OUTPUTS HERE
+   input [1:0] a;
+   input b;
+   output reg c;
+
+   always@ (a, b, c)
+   begin 
+
+      case (b)
+         1'b0 : c = a[0];
+         1'b1 : c = a[1];
+         default: begin
+            c = 0;
+         end
+      endcase
+   end
+endmodule
+
+
+
 
    //
    // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
    //
 
 
-endmodule
+
 
 `endif // MUX_2TO1
