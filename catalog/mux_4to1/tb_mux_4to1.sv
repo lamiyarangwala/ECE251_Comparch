@@ -17,8 +17,9 @@
 
 module tb_mux_4to1;
 
-   reg [3:0] a, b;   //inputs are reg for test bench
-   wire [3:0] c;     //outputs are wire for test bench
+   reg [3:0] A;
+   reg [1:0] B;   //inputs are reg for test bench
+   wire C;     //outputs are wire for test bench
    
    //
    // ---------------- INITIALIZE TEST BENCH ----------------
@@ -40,9 +41,9 @@ module tb_mux_4to1;
       begin
          // {a, b, cin} = invect [3:0];
          // #10 $display ("abcin = %b, cout = %b, sum = %b", {a, b, cin}, cout, sum);
-         {a} = invect [3:0];
-         {b} = ~invect [3:0];
-         #10 $display("a=%b, b=%b, c=%b", a, b, c);
+         {A} = invect [3:0];
+         {B} = ~invect [1:0];
+         #10 $display("a=%b, b=%b, c=%b", A, B, C);
       end
       $finish;
    end
@@ -50,6 +51,6 @@ module tb_mux_4to1;
    //
    // ---------------- INSTANTIATE UNIT UNDER TEST (UUT) ----------------
    //
-   mux_4to1 uut(.A(a), .B(b), .C(c));
+   mux_4to1 uut(.a(A), .b(B), .c(C));
 
 endmodule
