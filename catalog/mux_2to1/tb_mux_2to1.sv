@@ -17,9 +17,11 @@
 
 module tb_mux_2to1;
 
-   reg [1:0] A;
-   reg B;   //inputs are reg for test bench
-   wire C;     //outputs are wire for test bench
+   reg [N-1:0] Q0;
+   reg [N-1:0] Q1;
+   reg SEL, EN;   //iNputs are reg for test beNch
+   wire [N-1:0] D;     //outputs are wire for test beNch
+   parameter N = 8;
    
    //
    // ---------------- INITIALIZE TEST BENCH ----------------
@@ -36,14 +38,16 @@ module tb_mux_2to1;
    //apply input vectors
    initial
    begin: apply_stimulus
-      reg[3:0] invect; //invect[3] terminates the for loop
-      for (invect = 0; invect < 8; invect = invect + 1)
+      reg[N-1:0] invect; //invect[3] terminates the for loop
+      for (invect = 0; invect < 256; invect = invect + 1)
       begin
          // {a, b, cin} = invect [3:0];
-         // #10 $display ("abcin = %b, cout = %b, sum = %b", {a, b, cin}, cout, sum);
-         {A} = invect [1:0];
-         {B} = ~invect [0];
-         #10 $display("a=%b, b=%b, c=%b", A, B, C);
+         // #10 $display ("abciN = %b, cout = %b, sum = %b", {a, b, ciN}, cout, sum);
+         {Q0} = invect [N-1:0];
+         {Q1} = ~invect [N-1:0];
+         {SEL} = ~invect [0];
+         {EN} = invect[1];
+         #10 $display("Q0=%b, Q1=%b, en=%b, sel=%b, d=%b",Q0, Q1, EN, SEL, D);
       end
       $finish;
    end
@@ -51,6 +55,6 @@ module tb_mux_2to1;
    //
    // ---------------- INSTANTIATE UNIT UNDER TEST (UUT) ----------------
    //
-   mux_2to1 uut(.a(A), .b(B), .c(C));
+   mux_2to1 #(.n(N)) uut(.q0(Q0), .q1(Q1), .en(EN), .sel(SEL), .d(D));
 
 endmodule

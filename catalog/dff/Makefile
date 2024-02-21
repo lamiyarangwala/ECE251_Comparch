@@ -12,12 +12,12 @@
 # CHANGE THESE THREE LINES FOR YOUR DESIGN
 #
 #TOOL INPUT
-COMPONENT = dff	#THIS NEEDS TO MATCH THE NAME OF YOUR MODULE
-#SRC = $(shell ls *.sv)
-SRC = $(wildcard *.sv)
-SIM_ARGS=+a=3 +b=2 +s=0
-TBOUTPUT = tb_$(COMPONENT).vcd	# THIS NEEDS TO MATCH THE OUTPUT FILE
-									# FROM YOUR TESTBENCH
+COMPONENT = dff
+SRC = $(COMPONENT).sv
+SIM_ARGS=
+TESTBENCH = tb_$(COMPONENT).sv
+TBOUTPUT = tb_$(COMPONENT).vcd	#THIS NEEDS TO MATCH THE OUTPUT FILE
+							#FROM YOUR TESTBENCH
 ###############################################################################
 # BE CAREFUL WHEN CHANGING ITEMS BELOW THIS LINE
 ###############################################################################
@@ -26,22 +26,22 @@ COMPILER = iverilog
 SIMULATOR = vvp
 VIEWER = gtkwave #works on your host, not docker container since it's a GUI
 #TOOL OPTIONS
-COFLAGS = -g2012 #-v
-SFLAGS = -M . #-v
+COFLAGS = -g2012
+SFLAGS = -lxt2
 SOUTPUT = -lxt2		#SIMULATOR OUTPUT TYPE
 #TOOL OUTPUT
 #COUTPUT = compiler.out			#COMPILER OUTPUT
 ###############################################################################
 #MAKE DIRECTIVES
 .PHONY: compile simulate display clean
-compile : $(SRC)
-	$(COMPILER) $(COFLAGS) -o $(COMPONENT).vvp $(SRC)
+compile : $(TESTBENCH) $(SRC)
+	$(COMPILER) $(COFLAGS) -o $(COMPONENT) $(TESTBENCH) $(SRC)
 
-simulate: $(COMPONENT).vvp
-	$(SIMULATOR) $(SFLAGS) $(COMPONENT).vvp $(SOUTPUT)
+simulate: $(COMPONENT)
+	$(SIMULATOR) $(SFLAGS) $(COMPONENT) $(TESTBENCH) $(SOUTPUT)
 
 display: $(TBOUTPUT)
 	$(VIEWER) $(TBOUTPUT) &
 
 clean:
-	/bin/rm -f $(COMPONENT) $(COMPONENT).vvp $(TBOUTPUT) *.vcd a.out compiler.out
+	/bin/rm -f $(COMPONENT) $(TBOUTPUT) a.out compiler.out

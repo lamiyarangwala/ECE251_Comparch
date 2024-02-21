@@ -17,8 +17,12 @@
 
 module tb_sll;
 
-   reg [3:0] a, b;   //inputs are reg for test bench
-   wire [3:0] c;     //outputs are wire for test bench
+   reg D;   //inputs are reg for test bench
+   reg CLK;
+   reg EN;
+   reg RST;
+   wire [width-1:0] OUT;
+   
    
    //
    // ---------------- INITIALIZE TEST BENCH ----------------
@@ -32,24 +36,39 @@ module tb_sll;
       //   #50 $finish;
      end
 
-   //apply input vectors
-   initial
-   begin: apply_stimulus
-      reg[3:0] invect; //invect[3] terminates the for loop
-      for (invect = 0; invect < 8; invect = invect + 1)
-      begin
-         // {a, b, cin} = invect [3:0];
-         // #10 $display ("abcin = %b, cout = %b, sum = %b", {a, b, cin}, cout, sum);
-         {a} = invect [3:0];
-         {b} = ~invect [3:0];
-         #10 $display("a=%b, b=%b, c=%b", a, b, c);
-      end
-      $finish;
+   always #10 clk = ~clk;
+
+   inital begin
+   CLK <= 0;
+   EN <= 0;
+   RST <= 0;
+   D <= 'h1;
    end
+
+   inital begin
+   RST <= 0;
+   #20 RST <= 1;
+   EN <= 1;
+
+   repeat (7) @ (posedge clk)
+      data <= ~data;
+
+   #10 dir <= 1;
+   repeat (7) @ (posedge clk)
+      data <= ~data;
+
+   repeat (7) @ (posedge clk);
+
+   $finish;
+   end
+
+   initial 
+   $monitor ("RST=%0b D=%0b EN=%0b OUT=%b," RST, D, EN, OUT)
+   
 
    //
    // ---------------- INSTANTIATE UNIT UNDER TEST (UUT) ----------------
    //
-   sll uut(.A(a), .B(b), .C(c));
+   sll #(width) uut(.d(D), .clk(CLK),.en(EN),.rst(RST),.out(OUT));
 
 endmodule

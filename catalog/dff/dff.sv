@@ -11,27 +11,29 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-`ifndef DFF
-`define DFF
-
-module dff(input d, input rst, input en, input clk, output logic q, output logic qn);
-   //
-   // ---------------- PORT DEFINITIONS ----------------
-   //
-   // ADD YOUR MODULE INPUTS AND OUTPUTS HERE
-   always @ (posedge clk or negedge rst)
-   begin
-      if (!rst) begin
-         q = 0;
-         qn = ~q;
-      end
-      else begin
-         q = d;
-         qn = ~q;
-      end
-   end
-
-
+module dff
+    # (
+        parameter n = 8
+    )(
+  input  logic [n-1:0] d, 
+  input clk, rst, en,
+  output logic [n-1:0] q, 
+  output logic [n-1:0] qn
+);
+  always_ff @(posedge clk, posedge rst) begin
+    if (en) begin
+    if (rst) begin
+      q  <= 0;
+      qn <= ~0;
+    end else begin
+      q  <= d;
+      qn <= ~d;
+    end
+    end
+    else begin
+    q <= 'bz;
+    qn <= 'bz;
+    end
+    
+  end
 endmodule
-
-`endif // DFF

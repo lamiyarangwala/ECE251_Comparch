@@ -14,11 +14,33 @@
 `ifndef SLL
 `define SLL
 
-module sll(add your module parameters here);
+module sll
+#(parameter width = 8)
+(input d,
+input clk,
+input en,
+input rst, 
+output reg [width-1:0] out);
    //
    // ---------------- PORT DEFINITIONS ----------------
    //
    // ADD YOUR MODULE INPUTS AND OUTPUTS HERE
+   always @ (posedge clk)
+   begin
+      if (!rst) begin
+         out <= 0;
+      end
+      else begin
+         if (en)
+         out <= {out[width-2:0],d};
+         else begin
+            out <= out;
+         end
+      end
+
+
+   end
+
 
    //
    // ---------------- MODULE DESIGN IMPLEMENTATION ----------------

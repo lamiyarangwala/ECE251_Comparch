@@ -7,38 +7,55 @@
 // module: mux_4to1
 // hdl: Verilog
 //
-// author: Your Name <your.name@cooper.edu>
+// author: Lamiya Rangwala <your.name@cooper.edu>
 //
 ///////////////////////////////////////////////////////////////////////////////
 
 `ifndef MUX_4TO1
 `define MUX_4TO1
 
-module mux_4to1(a,b,c);
+module mux_4to1
+#(parameter n=8)
+(q0, q1, q2, q3, en, sel, d);
    //
    // ---------------- PORT DEFINITIONS ----------------
    //
    // ADD YOUR MODULE INPUTS AND OUTPUTS HERE
-   input [3:0] a;
-   input [1:0] b;
-   output reg c;
-   //
-   // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
-   //
-   always@ (a, b, c)
-   begin 
+   input [n-1:0] q0;
+   input [n-1:0] q1;
+   input [n-1:0] q2;
+   input [n-1:0] q3;
+   input [1:0] sel;
+   input en;
+   output reg [n-1:0] d;
 
-      case (b)
-         2'b00 : c = a[0];
-         2'b01 : c = a[1];
-         2'b10 : c = a[2];
-         2'b11 : c = a[3];
+   always@ (q0, q1, sel, d, en)
+   begin 
+      if (en) begin
+      case (sel)
+         2'b00 : d <= q0;
+         2'b01 : d <= q1;
+         2'b10 : d <= q2;
+         2'b11 : d <= q3;
          default: begin
-            c = 0;
+           d <= 0;
          end
       endcase
    end
-
+   else begin
+      d <= 'bz;
+   end
+   end
 endmodule
+
+
+
+
+   //
+   // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
+   //
+
+
+
 
 `endif // MUX_4TO1
