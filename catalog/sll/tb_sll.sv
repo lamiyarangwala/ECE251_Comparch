@@ -12,63 +12,75 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 `timescale 1ns/100ps
-
-`include "./sll.sv"
-
 module tb_sll;
+    //
+    // ---------------- DECLARATIONS OF PARAMETERS ----------------
+    //
+    parameter N = 8;
+    //
+    // ---------------- DECLARATIONS OF DATA TYPES ----------------
+    //
+    //inputs are reg for test bench - or use logic
+    reg CLK;
+    reg RST;
+    reg EN;
+    reg [N-1:0] D;
+    reg AMT;
+    //outputs are wire for test bench - or use logic
+    logic [N-1:0] OUT;
 
-   reg D;   //inputs are reg for test bench
-   reg CLK;
-   reg EN;
-   reg RST;
-   wire [width-1:0] OUT;
-   
-   
-   //
-   // ---------------- INITIALIZE TEST BENCH ----------------
-   //
-   initial
-     begin
+    //
+    // ---------------- INITIALIZE TEST BENCH ----------------
+    //
+    initial begin : initialize_signals
+        CLK <= 1'b0;
+        RST <= 1'b1;
+        EN <= 1'b1;
+        D <= 0;
+        AMT <= 2'b10;
+    end
+
+    initial begin: apply_stimulus
+      reg[N-1:0] invect; //invect[3] terminates the for loop
+      for (invect = 0; invect < 256; invect = invect + 1)
+      begin
+         // {a, b, cin} = invect [3:0];
+         // #10 $display ("abciN = %b, cout = %b, sum = %b", {a, b, ciN}, cout, sum);
+         
+         {CLK} = invect [0];
+         //{EN} = invect [1];
+         //{RST} = invect [2];
+         
+         if(invect[2])
+         {D} = invect;
+
+         //#10 $display("CLK=%b EN=%b RST=%b D=%b, AMT=%b \nOUT=%b",
+            //CLK, EN, RST, D, AMT, OUT);
+         #10 $display("CLK=%b D=%b, \n\tOUT=%b\n",
+            CLK, D, OUT);
+      end
+      $finish;
+   end
+    
+    initial begin
         $dumpfile("tb_sll.vcd"); // for Makefile, make dump file same as module name
-        $dumpvars(0, uut);
-      //   $monitor("A is %b, B is %b, C is %b", a, b, c);
-      //   #50 A = 4'b1100;
-      //   #50 $finish;
-     end
+        $dumpvars(0, dut);
+    end
+  
+    // a simple clock with 50% duty cycle
+    always begin: clock
+        #10 CLK = ~CLK; // every 10 timescale units, the clock inverts
+    end
 
-   always #10 clk = ~clk;
+    //
+    // ---------------- APPLY INPUT VECTORS ----------------
+    //
 
-   inital begin
-   CLK <= 0;
-   EN <= 0;
-   RST <= 0;
-   D <= 'h1;
-   end
+    
 
-   inital begin
-   RST <= 0;
-   #20 RST <= 1;
-   EN <= 1;
-
-   repeat (7) @ (posedge clk)
-      data <= ~data;
-
-   #10 dir <= 1;
-   repeat (7) @ (posedge clk)
-      data <= ~data;
-
-   repeat (7) @ (posedge clk);
-
-   $finish;
-   end
-
-   initial 
-   $monitor ("RST=%0b D=%0b EN=%0b OUT=%b," RST, D, EN, OUT)
-   
-
-   //
-   // ---------------- INSTANTIATE UNIT UNDER TEST (UUT) ----------------
-   //
-   sll #(width) uut(.d(D), .clk(CLK),.en(EN),.rst(RST),.out(OUT));
+    //
+    // ---------------- INSTANTIATE UNIT UNDER TEST (UUT) ----------------
+    //
+    sll #(.n(N)) dut(.clk(CLK), .rst(RST), .en(EN), .d(D), .amt(AMT), .out(OUT));
 
 endmodule

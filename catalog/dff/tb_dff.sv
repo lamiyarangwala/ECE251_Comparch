@@ -3,7 +3,7 @@ module tb_dff;
     //
     // ---------------- DECLARATIONS OF PARAMETERS ----------------
     //
-    parameter N = 32;
+    parameter N = 8;
     //
     // ---------------- DECLARATIONS OF DATA TYPES ----------------
     //
@@ -11,6 +11,7 @@ module tb_dff;
     reg CLK;
     reg RST;
     reg EN;
+    
     //outputs are wire for test bench - or use logic
     logic [N-1:0] D;
     logic [N-1:0] Q;
@@ -26,19 +27,22 @@ module tb_dff;
         D <= 0;
     end
 
-    initial begin
-//        $monitor ($time,"\tCLK=%b EN=%b RST=%b Z1=%b", CLK, RST, EN, Z1);
-        $monitor (
-            $time,
-            "\tCLK=%b EN=%b RST=%b \n\tD=%04b_%04b_%04b_%04b_%04b_%04b_%04b_%04b\n\tQ==%04b_%04b_%04b_%04b_%04b_%04b_%04b_%04b\n\tQn=%04b_%04b_%04b_%04b_%04b_%04b_%04b_%04b",
-            CLK, RST, EN,
-            D[31:28], D[27:24], D[23:20], D[19:16], D[15:12], D[11:8], D[7:4], D[3:0],
-            Q[31:28], Q[27:24], Q[23:20], Q[19:16], Q[15:12], Q[11:8], Q[7:4], Q[3:0],
-            Qn[31:28], Qn[27:24], Qn[23:20], Qn[19:16], Qn[15:12], Qn[11:8], Qn[7:4], Qn[3:0]
-        );
-//        $display("0x%04h_%04h_%04h_%04h", d[63:48], d[47:32], d[31:16], d[15:0]);
-    end
-
+    initial begin: apply_stimulus
+      reg[N-1:0] invect; //invect[3] terminates the for loop
+      for (invect = 0; invect < 256; invect = invect + 1)
+      begin
+         // {a, b, cin} = invect [3:0];
+         // #10 $display ("abciN = %b, cout = %b, sum = %b", {a, b, ciN}, cout, sum);
+         {CLK} = invect [0];
+         {EN} = invect [1];
+         {RST} = invect [2];
+         {D} = invect;
+         #10 $display("CLK=%b EN=%b RST=%b \nD=%b \nQ==%b \nQn=%b",
+            CLK, EN, RST, D, Q, Qn);
+      end
+      $finish;
+   end
+    
     initial begin
         $dumpfile("tb_dff.vcd"); // for Makefile, make dump file same as module name
         $dumpvars(0, dut);
@@ -53,23 +57,7 @@ module tb_dff;
     // ---------------- APPLY INPUT VECTORS ----------------
     //
 
-    initial begin: prog_apply_stimuli
-    #0
-    #10	RST = 1'b1;
-    #10 RST = 1'b0;
-    #10 EN = 1'b1;
-    #10
-    #10 D = 32'b0000_0000_1010_1001_0111_1100_0000_0001;
-    #10 
-    #10
-    #10
-    #100 EN = 1'b1;
-    #10
-    #10
-    #10
-    $finish;
-    end
-
+    
 
     //
     // ---------------- INSTANTIATE UNIT UNDER TEST (UUT) ----------------

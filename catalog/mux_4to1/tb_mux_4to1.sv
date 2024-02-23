@@ -48,10 +48,11 @@ module tb_mux_4to1;
          // #10 $display ("abciN = %b, cout = %b, sum = %b", {a, b, ciN}, cout, sum);
          {Q0} = invect [N-1:0];
          {Q1} = ~invect [N-1:0];
-         {Q2} = invect [N-1:0];
-         {Q3} = ~invect [N-1:0];
+         {Q2} = {invect [N-2:0], invect[N-1]};
+         {Q3} = ~Q2;
          {SEL} = ~invect [1:0];
          {EN} = invect[2];
+         
          #10 $display("Q0=%b, Q1=%b, Q2=%b, Q3=%b, en=%b, sel=%b, d=%b",Q0, Q1, Q2, Q3, EN, SEL, D);
       end
       $finish;

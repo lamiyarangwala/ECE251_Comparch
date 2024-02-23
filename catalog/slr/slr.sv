@@ -11,10 +11,10 @@
 //
 ///////////////////////////////////////////////////////////////////////////////
 
-`ifndef SLL
-`define SLL
+`ifndef SLR
+`define SLR
 
-module sll
+module slr
 #(parameter width = 8)
 (input d,
 input clk,
@@ -48,4 +48,4 @@ output reg [width-1:0] out);
 
 endmodule
 
-`endif // SLL
+`endif // SLR

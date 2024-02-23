@@ -15,26 +15,42 @@
 `define SLL
 
 module sll
-#(parameter width = 8)
-(input d,
-input clk,
-input en,
-input rst, 
-output reg [width-1:0] out);
+#(parameter n = 8)
+(
+input [n-1:0] d,
+input amt, clk, en, rst,
+output reg [n-1:0] out);
+
+
+
    //
    // ---------------- PORT DEFINITIONS ----------------
    //
    // ADD YOUR MODULE INPUTS AND OUTPUTS HERE
    always @ (posedge clk)
    begin
+      
+      
       if (!rst) begin
-         out <= 0;
+         out = 0;
       end
+
       else begin
-         if (en)
-         out <= {out[width-2:0],d};
+         if (en) begin
+         reg i;
+         reg [n-1:0] temp;
+            
+         temp = d;
+            
+         for (i = 0; i < amt; i = i + 1);
+         begin
+            temp = {temp[n-2:0], 1'b0};
+         end
+         out = temp;
+         end
+
          else begin
-            out <= out;
+            out = 'bz;
          end
       end
 
