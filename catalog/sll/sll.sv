@@ -15,10 +15,12 @@
 `define SLL
 
 module sll
-#(parameter n = 8)
+#(parameter n = 8,
+  parameter amt_n = 1)
 (
 input [n-1:0] d,
-input amt, clk, en, rst,
+input clk, en, rst,
+input [amt_n-1:0] amt,
 output reg [n-1:0] out);
 
 
@@ -31,26 +33,27 @@ output reg [n-1:0] out);
    begin
       
       
-      if (!rst) begin
-         out = 0;
+      if (en) begin
+         out = 'bz;
       end
 
       else begin
-         if (en) begin
-         reg i;
-         reg [n-1:0] temp;
+         if (rst) begin
+            out <= d << amt;
+         // reg i;
+         // reg [n-1:0] temp;
             
-         temp = d;
+         // temp = d;
             
-         for (i = 0; i < amt; i = i + 1);
-         begin
-            temp = {temp[n-2:0], 1'b0};
-         end
-         out = temp;
+         // for (i = 0; i < amt; i = i + 1);
+         // begin
+         //    temp = {temp[n-2:0], 1'b0};
+         // end
+         // out = temp;
          end
 
          else begin
-            out = 'bz;
+            out = 'b0;
          end
       end
 

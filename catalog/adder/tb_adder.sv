@@ -16,16 +16,22 @@
 `include "./adder.sv"
 
 module tb_adder;
-
-   reg [3:0] a, b;   //inputs are reg for test bench
-   wire [3:0] c;     //outputs are wire for test bench
+   
+   reg [N-1:0] A;
+   reg [N-1:0] B;  
+   reg CIN;  //inputs are reg for test bench
+   logic [N-1:0] SUM;
+   logic COUT;
+   parameter N = 8;
+       //outputs are wire for test bench
+   
    
    //
    // ---------------- INITIALIZE TEST BENCH ----------------
    //
    initial
      begin
-        $dumpfile("tb_example_module.vcd"); // for Makefile, make dump file same as module name
+        $dumpfile("adder.vcd"); // for Makefile, make dump file same as module name
         $dumpvars(0, uut);
       //   $monitor("A is %b, B is %b, C is %b", a, b, c);
       //   #50 A = 4'b1100;
@@ -35,14 +41,15 @@ module tb_adder;
    //apply input vectors
    initial
    begin: apply_stimulus
-      reg[3:0] invect; //invect[3] terminates the for loop
-      for (invect = 0; invect < 8; invect = invect + 1)
+      reg[N-1:0] invect; //invect[3] terminates the for loop
+      for (invect = 0; invect < 256; invect = invect + 1)
       begin
          // {a, b, cin} = invect [3:0];
          // #10 $display ("abcin = %b, cout = %b, sum = %b", {a, b, cin}, cout, sum);
-         {a} = invect [3:0];
-         {b} = ~invect [3:0];
-         #10 $display("a=%b, b=%b, c=%b", a, b, c);
+         {A} = invect [N-1:0];
+         {B} =$random;
+         {CIN} = invect[0];
+         #10 $display("A=%b, B=%b, CIN=%b, SUM=%b, COUT=%b", A, B, CIN, SUM, COUT);
       end
       $finish;
    end
@@ -50,6 +57,6 @@ module tb_adder;
    //
    // ---------------- INSTANTIATE UNIT UNDER TEST (UUT) ----------------
    //
-   adder uut(.A(a), .B(b), .C(c));
+   adder #(.n(N)) uut(.a(A), .b(B), .cin(CIN), .sum(SUM), .cout(COUT));
 
 endmodule

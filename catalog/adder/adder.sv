@@ -14,15 +14,29 @@
 `ifndef ADDER
 `define ADDER
 
-module adder(add your module parameters here);
+module adder
+#(parameter n = 8)
+   (a, b, cin, sum, cout);
    //
    // ---------------- PORT DEFINITIONS ----------------
    //
    // ADD YOUR MODULE INPUTS AND OUTPUTS HERE
+   input [n-1:0] a;
+   input [n-1:0] b;
+   input cin;
+   output reg cout;
+   output reg [n-1:0] sum;
+
+
 
    //
    // ---------------- MODULE DESIGN IMPLEMENTATION ----------------
    //
+
+   always @* begin
+      {cout,sum} = a + b + cin;
+   end
+
 
 endmodule
 
