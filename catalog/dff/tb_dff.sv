@@ -1,3 +1,17 @@
+///////////////////////////////////////////////////////////////////////////////
+//
+// D Flip Flow (DFF) TESTBENCH module
+//
+// A DFF module testbench for your Computer Architecture Elements Catalog
+//
+// module: tb_dff
+// hdl: Verilog
+//
+// author: Lamiya Rangwala <lamiya.rangwala@cooper.edu>
+//
+///////////////////////////////////////////////////////////////////////////////
+
+
 `timescale 1ns/100ps
 module tb_dff;
     //
