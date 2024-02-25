@@ -3,12 +3,16 @@
 // Shift Logical right (slr) TESTBENCH module
 //
 // A slr testbench module for your Computer Architecture Elements Catalog
-// ** To test without enable and reset, comment out lines 65 and 66.
+
+// __________________________________________________________________________________
+// ** To test without enable and reset, comment out lines 69 and 70.
+// __________________________________________________________________________________
+
 //
 // module: tb_slr
 // hdl: Verilog
 //
-// author: Your Name <your.name@cooper.edu>
+// author: Lamiya Rangwala <lamiya.rangwala@cooper.edu>
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -72,7 +76,7 @@ module tb_slr;
          end
       
         
-         #10 $display("CLK=%b EN=%b RST=%b D=%b, AMT=%d \nOUT=%b",
+         #10 $display("CLK=%b, EN=%b, RST=%b, D=%b, AMT=%d, \nOUT=%b",
             CLK, EN, RST, D, AMT, OUT);
 
             if (D == {N{1'b1}}) begin

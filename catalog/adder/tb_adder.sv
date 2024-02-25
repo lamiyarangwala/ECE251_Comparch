@@ -7,7 +7,7 @@
 // module: tb_adder
 // hdl: Verilog
 //
-// author: Your Name <your.name@cooper.edu>
+// author: Lamiya Rangwala <lamiya.rangwala@cooper.edu>
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,7 +19,7 @@ module tb_adder;
    
    reg [N-1:0] A;
    reg [N-1:0] B;  
-   reg CIN;  //inputs are reg for test bench
+   reg CIN, EN, RST;  //inputs are reg for test bench
    logic [N-1:0] SUM;
    logic COUT;
    parameter N = 8;
@@ -48,8 +48,13 @@ module tb_adder;
          // #10 $display ("abcin = %b, cout = %b, sum = %b", {a, b, cin}, cout, sum);
          {A} = invect [N-1:0];
          {B} =$random;
+         
+         EN = $random;
+         RST = $random;
+
+
          {CIN} = invect[0];
-         #10 $display("A=%b, B=%b, CIN=%b, SUM=%b, COUT=%b", A, B, CIN, SUM, COUT);
+         #10 $display("A=%b, B=%b, CIN=%b, EN=%b, RST=%b, SUM=%b, COUT=%b", A, B, CIN, EN, RST, SUM, COUT);
       end
       $finish;
    end
@@ -57,6 +62,6 @@ module tb_adder;
    //
    // ---------------- INSTANTIATE UNIT UNDER TEST (UUT) ----------------
    //
-   adder #(.n(N)) uut(.a(A), .b(B), .cin(CIN), .sum(SUM), .cout(COUT));
+   adder #(.n(N)) uut(.a(A), .b(B), .cin(CIN), .sum(SUM), .en(EN), .rst(RST), .cout(COUT));
 
 endmodule

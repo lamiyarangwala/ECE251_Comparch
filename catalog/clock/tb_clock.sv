@@ -7,7 +7,7 @@
 // module: tb_clock
 // hdl: Verilog
 //
-// author: Your Name <your.name@cooper.edu>
+// author: Lamiya Rangwala <lamiya.rangwala@cooper.edu>
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -17,7 +17,7 @@ module tb_clock;
     //
     // ---------------- DECLARATIONS OF PARAMETERS ----------------
     //
-    localparam P = 10;
+    localparam P = 60;
 
     //
     // ---------------- DECLARATIONS OF DATA TYPES ----------------
@@ -26,12 +26,15 @@ module tb_clock;
 
     //outputs are wire for test bench - or use logic
     reg CLK;
+    // reg RST;
+    // reg EN;
 
     //
     // ---------------- INITIALIZE TEST BENCH ----------------
     //
     
     initial begin
+        // $monitor ($time,"\tCLK=%b, EN=%b, RST=%b", CLK, EN, RST);
         $monitor ($time,"\tCLK=%b", CLK);
     end
 
@@ -39,6 +42,14 @@ module tb_clock;
         $dumpfile("tb_clock.vcd"); // for Makefile, make dump file same as module name
         $dumpvars(0, dut);
     end
+
+    // initial begin : initialize_signals   
+    //     RST <= 1'b1;
+    //     EN <= 1'b0;
+    // end
+
+    
+
   
     //
     // ---------------- APPLY INPUT VECTORS ----------------
@@ -46,15 +57,15 @@ module tb_clock;
 
     initial begin: prog_apply_stimuli
     #0
-    #10	
-    #10 
-    #10 
+    #10	//RST = 1'b1;
+    #10 //RST = 1'b0;
+    #10 //EN = 1'b1;
     #10
     #10 
-    #10 
     #10
     #10
     #10
+    #100 // EN = 1'b0;
     #10
     #10
     #10
@@ -64,8 +75,11 @@ module tb_clock;
     //
     // ---------------- INSTANTIATE UNIT UNDER TEST (UUT) ----------------
     //
+    // clock #(.period(P)) dut(
+    //     .en(EN), .rst(RST), .clk(CLK)
+    // );
+
     clock #(.period(P)) dut(
         .clk(CLK)
     );
-
 endmodule

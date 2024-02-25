@@ -17,7 +17,8 @@
 module clock
  #(parameter period = 10) // configuring parametrized module;
  //                          after module name but before instance name, with # 
-  (output logic clk); 
+  (input en, rst,
+   output logic clk); 
 
    
    
@@ -25,8 +26,16 @@ module clock
    initial clk = 1'b0;
     
 
-   always 
-   #half_period clk = ~clk;
+    always
+   begin 
+      // if (en)
+      //    clk = 'bz;
+      // else
+      //    if (!rst)
+      //    clk = 0;
+      //    else
+         #half_period clk = ~clk;
+   end
 endmodule
 
 `endif // CLOCK

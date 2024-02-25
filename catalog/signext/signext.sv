@@ -7,7 +7,7 @@
 // module: signext
 // hdl: Verilog
 //
-// author: Your Name <your.name@cooper.edu>
+// author: Lamiya Rangwala <lamiya.rangwala@cooper.edu>
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,22 +19,37 @@
 module signext
 #(parameter n  = 8,
   parameter num = 8)
-(in,out);
+(in, en, rst, out);
    //
    // ---------------- PORT DEFINITIONS ----------------
    //
    // ADD YOUR MODULE INPUTS AND OUTPUTS HERE
-  input reg [n-1:0]  in;
+  input [n-1:0] in;
+  input en, rst;
   output reg [n+num-1:0] out;
 
    always@*
    begin 
-      if (in[n-1] == 1'b1) begin
-      out <= {{num{1'b1}}, in};
-    end
+
+    if (en)
+         out = 'bz;
+      
     else begin
-      out <= {{num{1'b0}}, in};
+
+      if (rst) begin
+        if (in[n-1] == 1'b1) begin
+          out <= {{num{1'b1}}, in};
+        end
+        else begin
+          out <= {{num{1'b0}}, in};
+        end
+      end
+
+      else
+          out = 0;
     end
+
+  
    end
 endmodule
 

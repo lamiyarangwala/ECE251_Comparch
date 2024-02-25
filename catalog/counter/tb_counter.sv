@@ -4,10 +4,15 @@
 //
 // A counter testbench module for your Computer Architecture Elements Catalog
 //
+
+
+//  ** To test without enable and reset, comment out lines 78 and 79.
+
+
 // module: tb_counter
 // hdl: Verilog
 //
-// author: Your Name <your.name@cooper.edu>
+// author: Lamiya Rangwala <lamiya.rangwala@cooper.edu>
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -15,33 +20,33 @@ module tb_counter;
     //
     // ---------------- DECLARATIONS OF PARAMETERS ----------------
     //
-    parameter N = 32;
+    parameter N = 8;
     //
     // ---------------- DECLARATIONS OF DATA TYPES ----------------
     //
     //inputs are reg for test bench - or use logic
     reg CLK;
-    reg CLR;
+    reg RST;
     reg EN;
     reg UP_DOWN;
     //outputs are wire for test bench - or use logic
-    wire [N-1:0] Z1;
+    wire [N-1:0] Q;
 
     //
     // ---------------- INITIALIZE TEST BENCH ----------------
     //
     initial begin : initialize_signals
         CLK = 1'b0;
-        CLR = 1'b0;
+        RST = 1'b1;
         EN = 1'b1;
-        UP_DOWN = 1'b1;
+        UP_DOWN = 1'b0;
     end
 
-    initial begin
-//        $monitor ($time,"\tCLK=%b EN=%b CLR=%b Z1=%b", CLK, CLR, EN, Z1);
-        $monitor ($time,"\tCLK=%b EN=%b CLR=%b Z1=%04b_%04b_%04b_%04b_%04b_%04b_%04b_%04b", CLK, CLR, EN, Z1[31:28], Z1[27:24], Z1[23:20], Z1[19:16], Z1[15:12], Z1[11:8], Z1[7:4], Z1[3:0]);
-//        $display("0x%04h_%04h_%04h_%04h", d[63:48], d[47:32], d[31:16], d[15:0]);
-    end
+//     initial begin
+// //        $monitor ($time,"\tCLK=%b EN=%b RST=%b Z1=%b", CLK, RST, EN, Z1);
+//         $monitor ($time,"\tCLK=%b EN=%b RST=%b UP_DOWN=%b, Q=%d", CLK, EN, RST, UP_DOWN, Q);
+// //        $display("0x%04h_%04h_%04h_%04h", d[63:48], d[47:32], d[31:16], d[15:0]);
+//     end
 
     initial begin
         $dumpfile("tb_counter.vcd"); // for Makefile, make dump file same as module name
@@ -57,29 +62,36 @@ module tb_counter;
     // ---------------- APPLY INPUT VECTORS ----------------
     //
 
-    initial begin: prog_apply_stimuli
-    #0
-    #10	CLR = 1'b1;
-    #10 CLR = 1'b0;
-    #10 EN = 1'b1;
-    #10
-    #10
-    #10 
-    #10
-    #10
-    #100 EN = 1'b1;
-    #10
-    #10
-    #10
-    $finish;
-    end
+
+   initial
+   begin: apply_stimulus
+  
+      reg[N:0] invect; 
+      int break_inner_loop;
+      break_inner_loop = 0;
+      
+      for (UP_DOWN = 0; UP_DOWN <= 'd1; UP_DOWN++) begin
+      for (invect = 0; invect < 2*{N{1'b1}}; invect = invect + 1)
+      begin
+        // -------------------- TO TEST WITHOUT ENABLE, RESET--------------------------------
+        // ---------------------- COMMENT OUT FOLLOWING TWO LINES ------------------------------ 
+        // RST=$random;
+        // EN=$random;
+         #10 $display("CLK=%b EN=%b RST=%b UP_DOWN=%b, Q=%d", CLK, EN, RST, UP_DOWN, Q);
+         
+         
+      
+      end
+      end
+      $finish;
+   end
 
 
     //
     // ---------------- INSTANTIATE UNIT UNDER TEST (UUT) ----------------
     //
     counter #(.n(N)) dut(
-        .clk(CLK), .clr(CLR), .en(EN), .r(Z1)
+        .rst(RST), .clk(CLK), .en(EN), .up_down(UP_DOWN), .q(Q)
     );
 
 endmodule

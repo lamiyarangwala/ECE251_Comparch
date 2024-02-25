@@ -7,7 +7,7 @@
 // module: tb_mux_2to1
 // hdl: Verilog
 //
-// author: Your Name <your.name@cooper.edu>
+// author: Lamiya Rangwala <lamiya.rangwala@cooper.edu>
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -19,7 +19,7 @@ module tb_mux_2to1;
 
    reg [N-1:0] Q0;
    reg [N-1:0] Q1;
-   reg SEL, EN;   //iNputs are reg for test beNch
+   reg SEL, EN, RST;   //iNputs are reg for test beNch
    wire [N-1:0] D;     //outputs are wire for test beNch
    parameter N = 8;
    
@@ -47,7 +47,8 @@ module tb_mux_2to1;
          {Q1} = ~invect [N-1:0];
          {SEL} = ~invect [0];
          {EN} = invect[1];
-         #10 $display("Q0=%b, Q1=%b, en=%b, sel=%b, d=%b",Q0, Q1, EN, SEL, D);
+         {RST} = ~invect [0];
+         #10 $display("Q0=%b, Q1=%b, en=%b, sel=%b, rst=%b; d=%b",Q0, Q1, EN, SEL, RST, D);
       end
       $finish;
    end
@@ -55,6 +56,6 @@ module tb_mux_2to1;
    //
    // ---------------- INSTANTIATE UNIT UNDER TEST (UUT) ----------------
    //
-   mux_2to1 #(.n(N)) uut(.q0(Q0), .q1(Q1), .en(EN), .sel(SEL), .d(D));
+   mux_2to1 #(.n(N)) uut(.q0(Q0), .q1(Q1), .en(EN), .sel(SEL), .rst(RST), .d(D));
 
 endmodule

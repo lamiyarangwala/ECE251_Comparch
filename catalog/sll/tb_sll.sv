@@ -3,12 +3,16 @@
 // Shift Logical Left (sll) TESTBENCH module
 //
 // A sll testbench module for your Computer Architecture Elements Catalog
-// ** To test without enable and reset, comment out lines 65 and 66.
+
+// __________________________________________________________________________________
+// ** To test without enable and reset, comment out lines 69 and 70.
+// __________________________________________________________________________________
+
 //
 // module: tb_sll
 // hdl: Verilog
 //
-// author: Your Name <your.name@cooper.edu>
+// author: Lamiya Rangwala <lamiya.rangwala@cooper.edu>
 //
 ///////////////////////////////////////////////////////////////////////////////
 

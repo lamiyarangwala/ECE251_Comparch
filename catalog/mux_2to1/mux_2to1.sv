@@ -7,7 +7,7 @@
 // module: mux_2to1
 // hdl: Verilog
 //
-// author: Lamiya Rangwala <your.name@cooper.edu>
+// author: Lamiya Rangwala <lamiya.rangwala@cooper.edu>
 //
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -16,30 +16,35 @@
 
 module mux_2to1
 #(parameter n=8)
-(q0, q1, en, sel, d);
+(q0, q1, en, sel, rst, d);
    //
    // ---------------- PORT DEFINITIONS ----------------
    //
    // ADD YOUR MODULE INPUTS AND OUTPUTS HERE
    input [n-1:0] q0;
    input [n-1:0] q1;
-   input sel, en;
+   input sel, en, rst;
    output reg [n-1:0] d;
 
-   always@ (q0, q1, sel, d, en)
+   always@*
    begin 
       if (en) begin
-      case (sel)
-         1'b0 : d <= q0;
-         1'b1 : d <= q1;
-         default: begin
-           d <= 0;
+         if (!rst)
+         d <= 0;
+         else begin
+            case (sel)
+               1'b0 : d <= q0;
+               1'b1 : d <= q1;
+               default: begin
+               d <= 0;
+               end
+               
+            endcase
          end
-      endcase
    end
-   else begin
+   else 
       d <= 'bz;
-   end
+   
    end
 endmodule
 
