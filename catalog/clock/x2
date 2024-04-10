@@ -1,0 +1,9 @@
+LXT2 info: dumpfile tb_clock.vcd opened for output.
+                   0	CLK=0
+                  30	CLK=1
+                  60	CLK=0
+                  90	CLK=1
+                 120	CLK=0
+                 150	CLK=1
+                 180	CLK=0
+                 210	CLK=1
